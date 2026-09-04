@@ -1,0 +1,6 @@
+repos:
+  - repo: https://github.com/nobleo/nobleo-pre-commit
+    rev: 26.8.0
+    hooks:
+    - id: nobleo-hooks
+      verbose: true

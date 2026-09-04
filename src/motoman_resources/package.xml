@@ -13,7 +13,7 @@
       Approach inspired by the fanuc_resources package. See https://github.com/ros-industrial/fanuc.
     </p>
   </description>
-  <author>Alec Tiefenthal</author>
+  <!-- <author>Alec Tiefenthal</author> -->
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
   <maintainer email="alec@path-robotics.com">Alec Tiefenthal (Path Robotics)</maintainer>
   <license>BSD</license>
