@@ -1,0 +1,57 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="motoman_hc10dtp_b00">
+  <xacro:include filename="$(find motoman_hc10_support)/urdf/hc10dtp_b00_macro.xacro"/>
+
+  <!-- Gazebo uses unscoped link and joint names for this single-arm model. -->
+  <xacro:motoman_hc10dtp_b00 prefix="group_1_"/>
+
+  <link name="world"/>
+
+  <joint name="world_to_base_link" type="fixed">
+    <parent link="world"/>
+    <child link="group_1_base_link"/>
+    <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <ros2_control name="MotomanGazeboSystem" type="system">
+    <hardware>
+      <plugin>gz_ros2_control/GazeboSimSystem</plugin>
+    </hardware>
+    <joint name="group_1_joint_1">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="group_1_joint_2">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="group_1_joint_3">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="group_1_joint_4">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="group_1_joint_5">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+    <joint name="group_1_joint_6">
+      <command_interface name="position"/>
+      <state_interface name="position"/>
+      <state_interface name="velocity"/>
+    </joint>
+  </ros2_control>
+
+  <gazebo>
+    <plugin filename="libgz_ros2_control-system.so" name="gz_ros2_control::GazeboSimROS2ControlPlugin">
+      <parameters>$(find motoman_hc10_support)/config/hc10dtp_b00_controllers.yaml</parameters>
+    </plugin>
+  </gazebo>
+</robot>

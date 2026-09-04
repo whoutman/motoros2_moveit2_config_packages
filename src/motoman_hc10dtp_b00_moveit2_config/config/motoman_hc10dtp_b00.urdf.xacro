@@ -3,6 +3,6 @@
     <xacro:arg name="initial_positions_file" default="initial_positions.yaml" />
 
     <!-- Import motoman_hc10dtp_b00 urdf file -->
-    <xacro:include filename="$(find motoman_hc10_support)/urdf/hc10dtp_b00.urdf" />
+    <xacro:include filename="$(find motoman_hc10_support)/urdf/hc10dtp_b00.xacro" />
 
 </robot>
