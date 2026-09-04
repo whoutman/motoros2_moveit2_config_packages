@@ -1,0 +1,5 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="motoman_hc10dtp_b00">
+    <!-- Simulation-only entry point: uses the Gazebo-safe (no "/") joint/link names. -->
+    <xacro:include filename="$(find motoman_hc10_support)/urdf/hc10dtp_b00_gazebo.xacro" />
+</robot>
