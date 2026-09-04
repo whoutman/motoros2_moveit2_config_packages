@@ -16,10 +16,10 @@
       <li>GP12 - Default</li>
     </ul>
     <p>
-      Joint limits and maximum joint velocities are based on the information 
-      found in the online 
+      Joint limits and maximum joint velocities are based on the information
+      found in the online
       https://www.motoman.com/hubfs/Robots/GP12.pdf
-      All urdfs are based on the default motion and joint velocity limits, 
+      All urdfs are based on the default motion and joint velocity limits,
       unless noted otherwise.
     </p>
     <p>
@@ -28,7 +28,7 @@
       robot model and configuration you intend to use them with.
     </p>
   </description>
-  <author>Eric Marcil</author>
+  <!-- <author>Eric Marcil</author> -->
   <maintainer email="g.a.vanderhoorn@tudelft.nl">G.A. vd. Hoorn (TU Delft Robotics Institute)</maintainer>
   <license>BSD</license>
 

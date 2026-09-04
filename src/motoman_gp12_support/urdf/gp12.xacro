@@ -4,5 +4,3 @@
 	<xacro:include filename="$(find motoman_gp12_support)/urdf/gp12_macro.xacro" />
 	<xacro:motoman_gp12 prefix="group_1/"/>
 </robot>
-
-
