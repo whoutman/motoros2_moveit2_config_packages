@@ -15,6 +15,8 @@ def generate_launch_description():
     )
     use_sim_time_arg = DeclareLaunchArgument("use_sim_time", default_value="true")
     use_sim_time = LaunchConfiguration("use_sim_time")
+    log_level_arg = DeclareLaunchArgument("log_level", default_value="info")
+    log_level = LaunchConfiguration("log_level")
 
     package_share = get_package_share_directory("motoman_hc10dtp_b00_moveit2_config")
     robot_description_file_path = os.path.join(
@@ -41,6 +43,7 @@ def generate_launch_description():
         .robot_description(file_path=robot_description_file_path)
         .robot_description_semantic(file_path=robot_description_semantic_file_path)
         .trajectory_execution(file_path=trajectory_execution_file_path)
+        .planning_pipelines(default_planning_pipeline="ompl", pipelines=["ompl"])
         .to_moveit_configs()
     )
 
@@ -53,7 +56,18 @@ def generate_launch_description():
             warehouse_ros_config,
             {"use_sim_time": use_sim_time},
         ],
-        arguments=["--ros-args", "--log-level", "info"],
+        arguments=[
+            "--ros-args",
+            "--log-level",
+            log_level,
+            # silence high-frequency rcl/rmw/rclcpp internals even when log_level=debug
+            "--log-level",
+            "rcl:=warn",
+            "--log-level",
+            "rclcpp:=warn",
+            "--log-level",
+            "rmw_fastrtps_cpp:=warn",
+        ],
     )
     rviz_node = Node(
         package="rviz2",
@@ -85,5 +99,5 @@ def generate_launch_description():
     )
 
     return LaunchDescription(
-        [db_arg, use_sim_time_arg, move_group_node, rviz_node, robot_state_publisher_node]
+        [db_arg, use_sim_time_arg, log_level_arg, move_group_node, rviz_node, robot_state_publisher_node]
     )

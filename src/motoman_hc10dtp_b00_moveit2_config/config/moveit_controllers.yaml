@@ -2,13 +2,20 @@
 
 moveit_controller_manager: moveit_simple_controller_manager/MoveItSimpleControllerManager
 
+trajectory_execution:
+  # temporarily relaxed for debugging the "Expired goal" issue: MoveIt's own
+  # execution-duration monitor was giving up before motoros2 ever responded.
+  allowed_execution_duration_scaling: 10.0
+  allowed_goal_duration_margin: 5.0
+  execution_duration_monitoring: false
+
 moveit_simple_controller_manager:
   controller_names:
-    - joint_trajectory_controller
+    - follow_joint_trajectory
 
-  joint_trajectory_controller:
+  follow_joint_trajectory:
     type: FollowJointTrajectory
-    action_ns: follow_joint_trajectory
+    action_ns: ""
     default: true
     joints:
       - group_1/joint_1
@@ -17,3 +24,4 @@ moveit_simple_controller_manager:
       - group_1/joint_4
       - group_1/joint_5
       - group_1/joint_6
+

@@ -3,6 +3,7 @@ import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument, IncludeLaunchDescription, RegisterEventHandler, SetEnvironmentVariable
+from launch.conditions import IfCondition, UnlessCondition
 from launch.event_handlers import OnProcessStart
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch.substitutions import Command, LaunchConfiguration
@@ -12,6 +13,7 @@ from launch_ros.parameter_descriptions import ParameterValue
 
 def generate_launch_description():
     use_sim_time = LaunchConfiguration("use_sim_time")
+    gui = LaunchConfiguration("gui")
     package_share = get_package_share_directory("motoman_hc10_support")
     xacro_file = os.path.join(package_share, "urdf", "hc10dtp_b00_gazebo.xacro")
     controllers_file = os.path.join(package_share, "config", "hc10dtp_b00_controllers.yaml")
@@ -23,15 +25,23 @@ def generate_launch_description():
         )
     }
 
-    gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            os.path.join(
-                get_package_share_directory("ros_gz_sim"),
-                "launch",
-                "gz_sim.launch.py",
-            )
-        ),
+    gz_sim_launch = os.path.join(
+        get_package_share_directory("ros_gz_sim"),
+        "launch",
+        "gz_sim.launch.py",
+    )
+
+    gazebo_with_gui = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(gz_sim_launch),
         launch_arguments={"gz_args": "-r empty.sdf"}.items(),
+        condition=IfCondition(gui),
+    )
+
+    # "-s" runs the Gazebo server headless (no GUI client).
+    gazebo_headless = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(gz_sim_launch),
+        launch_arguments={"gz_args": "-r -s empty.sdf"}.items(),
+        condition=UnlessCondition(gui),
     )
 
     clock_bridge = Node(
@@ -79,11 +89,13 @@ def generate_launch_description():
     return LaunchDescription(
         [
             DeclareLaunchArgument("use_sim_time", default_value="true"),
+            DeclareLaunchArgument("gui", default_value="true", description="Launch the Gazebo GUI client"),
             SetEnvironmentVariable(
                 name="GZ_SIM_RESOURCE_PATH",
                 value=os.path.dirname(package_share),
             ),
-            gazebo,
+            gazebo_with_gui,
+            gazebo_headless,
             clock_bridge,
             robot_state_publisher,
             RegisterEventHandler(
