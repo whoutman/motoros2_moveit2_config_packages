@@ -11,9 +11,9 @@ trajectory_execution:
 
 moveit_simple_controller_manager:
   controller_names:
-    - follow_joint_trajectory
+    - follow_joint_trajectory_queue_sender
 
-  follow_joint_trajectory:
+  follow_joint_trajectory_queue_sender:
     type: FollowJointTrajectory
     action_ns: ""
     default: true
