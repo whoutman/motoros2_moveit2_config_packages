@@ -5,7 +5,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
 from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node
+from launch_ros.actions import Node, SetParameter
 from moveit_configs_utils import MoveItConfigsBuilder
 
 
@@ -69,6 +69,13 @@ def generate_launch_description():
             "rmw_fastrtps_cpp:=warn",
         ],
     )
+    # Applies to every node in this process, including the internal MoveGroupInterface
+    # node that RViz's Context-tab DB connect spins up for path-constraint storage.
+    set_warehouse_plugin_param = SetParameter(
+        name="warehouse_plugin", value="warehouse_ros_sqlite::DatabaseConnection"
+    )
+    set_warehouse_host_param = SetParameter(name="warehouse_host", value=LaunchConfiguration("warehouse_host"))
+
     rviz_node = Node(
         package="rviz2",
         executable="rviz2",
@@ -99,5 +106,14 @@ def generate_launch_description():
     )
 
     return LaunchDescription(
-        [db_arg, use_sim_time_arg, log_level_arg, move_group_node, rviz_node, robot_state_publisher_node]
+        [
+            db_arg,
+            use_sim_time_arg,
+            log_level_arg,
+            set_warehouse_plugin_param,
+            set_warehouse_host_param,
+            move_group_node,
+            rviz_node,
+            robot_state_publisher_node,
+        ]
     )
