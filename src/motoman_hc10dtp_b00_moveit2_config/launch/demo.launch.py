@@ -4,6 +4,7 @@ import xacro
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
 from launch.actions import DeclareLaunchArgument
+from launch.conditions import IfCondition
 from launch.substitutions import LaunchConfiguration
 from launch_ros.actions import Node, SetParameter
 from moveit_configs_utils import MoveItConfigsBuilder
@@ -17,6 +18,8 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration("use_sim_time")
     log_level_arg = DeclareLaunchArgument("log_level", default_value="info")
     log_level = LaunchConfiguration("log_level")
+    use_rviz_arg = DeclareLaunchArgument("use_rviz", default_value="true")
+    use_rviz = LaunchConfiguration("use_rviz")
 
     package_share = get_package_share_directory("motoman_hc10dtp_b00_moveit2_config")
     robot_description_file_path = os.path.join(
@@ -81,6 +84,7 @@ def generate_launch_description():
         executable="rviz2",
         name="rviz2",
         output="log",
+        condition=IfCondition(use_rviz),
         arguments=["-d", rviz_config_file_path],
         parameters=[
             moveit_config.robot_description,
@@ -110,6 +114,7 @@ def generate_launch_description():
             db_arg,
             use_sim_time_arg,
             log_level_arg,
+            use_rviz_arg,
             set_warehouse_plugin_param,
             set_warehouse_host_param,
             move_group_node,
